@@ -17,4 +17,5 @@ This project served for me as a possibility to get acquainted with
   * the new Python pattern matching functionality ([`match` statement](https://docs.python.org/3/tutorial/controlflow.html#match-statements)),
   * type hints and [mypy](http://mypy-lang.org/),
   * unit testing using [pytest](https://pytest.org)
-Big thanks to Alexey for sharing great educative content!
+
+Big thanks to [Alexey](https://github.com/tsoding) for sharing great educative content!
