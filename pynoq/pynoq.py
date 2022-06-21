@@ -1,5 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
+from itertools import pairwise
 from typing import Dict, List
 from copy import deepcopy
 
@@ -121,34 +122,45 @@ def pattern_match(pattern: Expr, expr: Expr) -> Bindings:
                 return False
     
     bindings: Bindings = {}
-    pattern_match_impl(pattern, expr)
-    return bindings
+    return bindings if pattern_match_impl(pattern, expr) else {}
     # return None
     
+
+class TokenKind(Enum):
+    """Token kinds"""
+    SYM = 1
+    LPAREN = 2
+    RPAREN = 3
+    COMMA = 4
+    EQUALS = 5
+    
+    
+@dataclass
+class Token:
+    """Token in the input stream"""
+    kind: TokenKind
+    text: str
+
+
+class Lexer:
+    """Lexer for the input stream"""
+    def __init__(self, chars: str):
+        self.chars = chars
+
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        for curr_char, next_char in pairwise(self.chars):
+            return curr_char
+        else:
+            raise StopIteration()
+
 
 if __name__ == '__main__':
     
     import doctest
     doctest.testmod()
     
-    # Rule: swap(pair(a, b)) = pair(b, a)
-    swap = Rule(
-        head=Fun("swap", 
-                 [Fun("pair", [Sym("a"), Sym("b")])]),
-        body=Fun("pair", [Sym("b"), Sym("a")])
-    )
-    
-    expr = Fun("foo", [
-               Fun("swap", 
-                   [Fun("pair", [Fun("f", [Sym("a")]),
-                                 Fun("g", [Sym("b")])])]),
-               Fun("swap", 
-                   [Fun("pair", [Fun("q", [Sym("c")]),
-                                 Fun("z", [Sym("d")])])]),
-               ])
-    
-    print("Rule:  ", swap)
-    print("Expr:  ", expr)
-    print("Expr': ", swap.apply_all(expr))
-    
-    
+    for token in Lexer("swap(pair(a, b)) = pair(b, a)"):
+        print(token)
