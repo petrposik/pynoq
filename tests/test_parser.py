@@ -3,28 +3,43 @@ from pynoq.parser import *
 
 from .testingvars import *
 
-tokenizer_test_pairs = [
-    ('a', ['a']),
-    ('abc', ['abc']),
-    ('f()', ['f', '(', ')']),
-    ('foo()', ['foo', '(', ')']),
-    ('f(a)', ['f', '(', 'a', ')']),
-    ('foo(abc)', ['foo', '(', 'abc', ')']),
-    ('f(a, b)', ['f', '(', 'a', 'b', ')']),
-    ('foo(abc, bcd)', ['foo', '(', 'abc', 'bcd', ')']),
-    ('f(g())', ['f', '(', 'g', '(', ')', ')']),
-    ('foo(gee())', ['foo', '(', 'gee', '(', ')', ')']),
-    ('f(g(a))', ['f', '(', 'g', '(', 'a', ')', ')']),
-    ('foo(gee(abc))', ['foo', '(', 'gee', '(', 'abc', ')', ')']),
-    ('f(g(), h())', ['f', '(', 'g', '(', ')', 'h', '(', ')', ')']),
-    ('foo(gee(), hue())', ['foo', '(', 'gee', '(', ')', 'hue', '(', ')', ')']),
-    ('f(g(a), h(b))', ['f', '(', 'g', '(', 'a', ')', 'h', '(', 'b', ')', ')']),
-    ('foo(gee(abc), hue(bcd))', ['foo', '(', 'gee', '(', 'abc', ')', 'hue', '(', 'bcd', ')', ')']),
-]
+class TestPeekable:
+    
+    def test_nextIf_empty_iterable(self):
+        p = Peekable([])
+        assert p.next_if(lambda x: bool(x)) == None
+        assert p.next_if(lambda x: False) == None
+        
+    def test_nextIf_iterable_with_1_item(self):
+        p = Peekable([1])
+        assert p.next_if(lambda x: False) == None
+        assert p.next_if(lambda x: x) == 1
+        assert p.next_if(lambda x: x) == None
+        
+        
 
-@pytest.mark.parametrize('text, tokens', tokenizer_test_pairs)
-def test_tokenize(text, tokens):
-    assert tokenize(text) == tokens
+# tokenizer_test_pairs = [
+#     ('a', ['a']),
+#     ('abc', ['abc']),
+#     ('f()', ['f', '(', ')']),
+#     ('foo()', ['foo', '(', ')']),
+#     ('f(a)', ['f', '(', 'a', ')']),
+#     ('foo(abc)', ['foo', '(', 'abc', ')']),
+#     ('f(a, b)', ['f', '(', 'a', 'b', ')']),
+#     ('foo(abc, bcd)', ['foo', '(', 'abc', 'bcd', ')']),
+#     ('f(g())', ['f', '(', 'g', '(', ')', ')']),
+#     ('foo(gee())', ['foo', '(', 'gee', '(', ')', ')']),
+#     ('f(g(a))', ['f', '(', 'g', '(', 'a', ')', ')']),
+#     ('foo(gee(abc))', ['foo', '(', 'gee', '(', 'abc', ')', ')']),
+#     ('f(g(), h())', ['f', '(', 'g', '(', ')', 'h', '(', ')', ')']),
+#     ('foo(gee(), hue())', ['foo', '(', 'gee', '(', ')', 'hue', '(', ')', ')']),
+#     ('f(g(a), h(b))', ['f', '(', 'g', '(', 'a', ')', 'h', '(', 'b', ')', ')']),
+#     ('foo(gee(abc), hue(bcd))', ['foo', '(', 'gee', '(', 'abc', ')', 'hue', '(', 'bcd', ')', ')']),
+# ]
+
+# @pytest.mark.parametrize('text, tokens', tokenizer_test_pairs)
+# def test_tokenize(text, tokens):
+#     assert tokenize(text) == tokens
 
 
 parser_test_pairs = [
