@@ -5,8 +5,6 @@ from typing import Dict, List
 from copy import deepcopy
 
 
-
-
 @dataclass
 class Expr:
     "Common ancestor of nodes in AST"
@@ -126,41 +124,7 @@ def pattern_match(pattern: Expr, expr: Expr) -> Bindings:
     # return None
     
 
-class TokenKind(Enum):
-    """Token kinds"""
-    SYM = 1
-    LPAREN = 2
-    RPAREN = 3
-    COMMA = 4
-    EQUALS = 5
-    
-    
-@dataclass
-class Token:
-    """Token in the input stream"""
-    kind: TokenKind
-    text: str
-
-
-class Lexer:
-    """Lexer for the input stream"""
-    def __init__(self, chars: str):
-        self.chars = chars
-
-    def __iter__(self):
-        return self
-    
-    def __next__(self):
-        for curr_char, next_char in pairwise(self.chars):
-            return curr_char
-        else:
-            raise StopIteration()
-
-
 if __name__ == '__main__':
     
     import doctest
     doctest.testmod()
-    
-    for token in Lexer("swap(pair(a, b)) = pair(b, a)"):
-        print(token)
